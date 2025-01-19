@@ -9,10 +9,16 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        fontFamily: 'ProximaNova',
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+      ),
+      home: const Scaffold(
         body: Center(
-          child: Text('Hello World!'),
+          child: Text('Hello World!'),     
         ),
       ),
     );

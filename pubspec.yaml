@@ -17,3 +17,19 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+
+  assets:
+    - assets/
+    - assets/images/
+
+  fonts:
+    - family: ProximaNova
+      fonts:
+        - asset: fonts/ProximaNova-Regular.otf
+        - asset: fonts/proximanova-medium.otf
+          weight: 500
+        - asset: fonts/Proxima Nova Semibold.otf
+          weight: 600
+        - asset: fonts/Proxima Nova Alt Bold.otf
+          weight: 700
