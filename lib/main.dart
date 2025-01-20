@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'screens/audio_record_page.dart';
+
 void main() {
   runApp(const MainApp());
 }
@@ -16,11 +18,7 @@ class MainApp extends StatelessWidget {
         fontFamily: 'ProximaNova',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
       ),
-      home: const Scaffold(
-        body: Center(
-          child: Text('Hello World!'),     
-        ),
-      ),
+      home: const AudioRecordPage(),
     );
   }
 }
