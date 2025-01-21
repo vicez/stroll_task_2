@@ -14,7 +14,14 @@ import '../services/audio_player_service.dart';
 import '../services/permission_service.dart';
 
 class Recorder extends StatefulWidget {
-  const Recorder({super.key});
+  const Recorder({
+    super.key,
+    required this.firstScreenLoad,
+    required this.animationDuration,
+  });
+
+  final bool firstScreenLoad;
+  final Duration animationDuration;
 
   @override
   State<Recorder> createState() => _RecorderState();
@@ -238,12 +245,19 @@ class _RecorderState extends State<Recorder>
           children: [
             GestureDetector(
               onTap: () => deleteFile(),
-              child: Text(
-                'Delete',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: props.actionTextColor,
-                  fontSize: 16,
+              child: AnimatedSlide(
+                offset: widget.firstScreenLoad
+                    ? const Offset(-5, 0)
+                    : const Offset(0, 0),
+                duration: widget.animationDuration,
+                curve: Curves.easeOut,
+                child: Text(
+                  'Delete',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: props.actionTextColor,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),
@@ -275,11 +289,13 @@ class _RecorderState extends State<Recorder>
                     break;
                 }
               },
-              child: Container(
+              child: AnimatedContainer(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(0),
-                width: 64,
-                height: 64,
+                duration: widget.animationDuration,
+                curve: Curves.easeOut,
+                width: widget.firstScreenLoad ? 2 : 64,
+                height: widget.firstScreenLoad ? 2 : 64,
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: const Color.fromRGBO(245, 245, 245, 0.7),
@@ -298,12 +314,19 @@ class _RecorderState extends State<Recorder>
               ),
             ),
             const SizedBox(width: 40),
-            Text(
-              'Submit',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: props.actionTextColor,
-                fontSize: 16,
+            AnimatedSlide(
+              offset: widget.firstScreenLoad
+                  ? const Offset(5, 0)
+                  : const Offset(0, 0),
+              duration: widget.animationDuration,
+              curve: Curves.easeOut,
+              child: Text(
+                'Submit',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: props.actionTextColor,
+                  fontSize: 16,
+                ),
               ),
             ),
           ],
