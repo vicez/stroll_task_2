@@ -70,7 +70,7 @@ class _WaveFormState extends State<WaveForm> {
   Widget build(BuildContext context) {
     const widgetHeight = 30.0;
     final waveBarHeightFactor = (maxDecibel / widgetHeight);
-    final widgetWidth = MediaQuery.of(context).size.width - 40;
+    final widgetWidth = MediaQuery.of(context).size.width;
     final visibleBars = widgetWidth / 8;
 
     if (widget.recorderState == RecorderState.rest) {
@@ -112,10 +112,11 @@ class _WaveFormState extends State<WaveForm> {
                       widget.recorderState == RecorderState.paused)) {
                 final playbackFraction = widget.currentPosition.inMilliseconds /
                     widget.audioFile!.fileDuration.inMilliseconds;
-                final playbackBarIndex =
-                    (playbackFraction * _waveformValues.length).floor();
-                isPlayed = index >= playbackBarIndex - visibleBars ~/ 3 &&
-                    index <= playbackBarIndex;
+                int playbackBarIndex =
+                    (playbackFraction * _waveformValues.length).ceil();
+
+                playbackBarIndex = (_waveformValues.length - playbackBarIndex) < 10 ? playbackBarIndex : (playbackBarIndex + 5);
+                 isPlayed = index <= playbackBarIndex;
               }
               return Container(
                 width: 4,
