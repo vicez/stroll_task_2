@@ -52,7 +52,7 @@ class _WaveFormState extends State<WaveForm> {
         if (_scrollController.hasClients) {
           _scrollController.animateTo(
             _scrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 400),
+            duration: const Duration(milliseconds: 100),
             curve: Curves.easeOut,
           );
         }
@@ -70,19 +70,24 @@ class _WaveFormState extends State<WaveForm> {
   Widget build(BuildContext context) {
     const widgetHeight = 30.0;
     final waveBarHeightFactor = (maxDecibel / widgetHeight);
-    final widgetWidth = MediaQuery.of(context).size.width;
-    final visibleBars = widgetWidth / 8;
+    final widgetWidth = MediaQuery.of(context).size.width - 40;
+    final playbackFraction = (widget.currentPosition > Duration.zero
+            ? widget.currentPosition.inMilliseconds
+            : 1) /
+        (widget.audioFile != null
+            ? widget.audioFile!.fileDuration.inMilliseconds
+            : 1);
+    final playbackBarIndex =
+        (playbackFraction * _waveformValues.length).floor();
 
     if (widget.recorderState == RecorderState.rest) {
       _waveformValues.clear();
     } else if (widget.recorderState == RecorderState.stopped) {
       _scrollController.jumpTo(0.0);
     } else if (widget.recorderState == RecorderState.playing) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: widget.audioFile!.fileDuration,
-        curve: Curves.easeOut,
-      );
+      final playbackBarWidth =
+          (playbackFraction * _scrollController.position.maxScrollExtent);
+      _scrollController.jumpTo(playbackBarWidth);
     } else if (widget.recorderState == RecorderState.paused) {
       _scrollController.position.hold(() {});
     }
@@ -93,6 +98,7 @@ class _WaveFormState extends State<WaveForm> {
       child: SingleChildScrollView(
         controller: _scrollController,
         scrollDirection: Axis.horizontal,
+        physics: const NeverScrollableScrollPhysics(),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -110,13 +116,7 @@ class _WaveFormState extends State<WaveForm> {
               if (widget.audioFile != null &&
                   (widget.recorderState == RecorderState.playing ||
                       widget.recorderState == RecorderState.paused)) {
-                final playbackFraction = widget.currentPosition.inMilliseconds /
-                    widget.audioFile!.fileDuration.inMilliseconds;
-                int playbackBarIndex =
-                    (playbackFraction * _waveformValues.length).ceil();
-
-                playbackBarIndex = (_waveformValues.length - playbackBarIndex) < 10 ? playbackBarIndex : (playbackBarIndex + 5);
-                 isPlayed = index <= playbackBarIndex;
+                isPlayed = index <= playbackBarIndex;
               }
               return Container(
                 width: 4,
@@ -132,7 +132,6 @@ class _WaveFormState extends State<WaveForm> {
                     : const Color(0xff36393E),
               );
             }).toList(),
-            const SizedBox(width: 50),
           ],
         ),
       ),
