@@ -25,7 +25,6 @@ class WaveForm extends StatefulWidget {
 class _WaveFormState extends State<WaveForm> {
   late List<double> _waveformValues;
   late ScrollController _scrollController;
-  final widgetHeight = 30.0;
   final maxDecibel = 40.0;
 
   Stream<double> aplitudeStream() async* {
@@ -69,8 +68,10 @@ class _WaveFormState extends State<WaveForm> {
 
   @override
   Widget build(BuildContext context) {
-    final widgetWidth = MediaQuery.of(context).size.height - 40;
+    const widgetHeight = 30.0;
     final waveBarHeightFactor = (maxDecibel / widgetHeight);
+    final widgetWidth = MediaQuery.of(context).size.width - 40;
+    final visibleBars = widgetWidth / 8;
 
     if (widget.recorderState == RecorderState.rest) {
       _waveformValues.clear();
@@ -111,9 +112,10 @@ class _WaveFormState extends State<WaveForm> {
                       widget.recorderState == RecorderState.paused)) {
                 final playbackFraction = widget.currentPosition.inMilliseconds /
                     widget.audioFile!.fileDuration.inMilliseconds;
-                isPlayed =
-                    (index / _waveformValues.length <= playbackFraction) ||
-                        (index <= 18);
+                final playbackBarIndex =
+                    (playbackFraction * _waveformValues.length).floor();
+                isPlayed = index >= playbackBarIndex - visibleBars ~/ 3 &&
+                    index <= playbackBarIndex;
               }
               return Container(
                 width: 4,
