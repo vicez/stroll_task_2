@@ -26,16 +26,18 @@ class _AudioRecordPageState extends State<AudioRecordPage> {
     return Scaffold(
       body: Stack(
         children: [
-          AnimatedContainer(
-            height: MediaQuery.of(context).size.height * 0.65,
+          AnimatedOpacity(
             duration: _animationDuration,
             curve: Curves.easeOut,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: const AssetImage('assets/images/joey.png'),
-                fit: BoxFit.cover,
-                alignment: Alignment.topCenter,
-                opacity: firstScreenLoad ? 0.0 : 1.0,
+            opacity: firstScreenLoad ? 0.0 : 1.0,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.65,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/joey.png'),
+                  fit: BoxFit.cover,
+                  alignment: Alignment.topCenter,
+                ),
               ),
             ),
           ),
