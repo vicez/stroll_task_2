@@ -1,21 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:stroll_task_2/widgets/recorder.dart';
 
-class AudioRecordPage extends StatelessWidget {
+class AudioRecordPage extends StatefulWidget {
   const AudioRecordPage({super.key});
+
+  @override
+  State<AudioRecordPage> createState() => _AudioRecordPageState();
+}
+
+class _AudioRecordPageState extends State<AudioRecordPage> {
+  bool firstScreenLoad = true;
+  final _animationDuration = const Duration(seconds: 3);
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        firstScreenLoad = false;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
+          AnimatedContainer(
             height: MediaQuery.of(context).size.height * 0.65,
-            decoration: const BoxDecoration(
+            duration: _animationDuration,
+            curve: Curves.easeOut,
+            decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/joey.png'),
+                image: const AssetImage('assets/images/joey.png'),
                 fit: BoxFit.cover,
                 alignment: Alignment.topCenter,
+                opacity: firstScreenLoad ? 0.0 : 1.0,
               ),
             ),
           ),
@@ -201,7 +221,10 @@ class AudioRecordPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 34),
-                    const Recorder(),
+                    Recorder(
+                      firstScreenLoad: firstScreenLoad,
+                      animationDuration: _animationDuration,
+                    ),
                     const SizedBox(height: 22),
                     const Text(
                       'Unmatch',
