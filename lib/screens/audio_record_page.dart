@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:stroll_task_2/widgets/recorder.dart';
 
-class AudioRecordPage extends StatefulWidget {
+class AudioRecordPage extends StatelessWidget {
   const AudioRecordPage({super.key});
 
-  @override
-  State<AudioRecordPage> createState() => _AudioRecordPageState();
-}
-
-class _AudioRecordPageState extends State<AudioRecordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -197,6 +192,7 @@ class _AudioRecordPageState extends State<AudioRecordPage> {
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         '“Mine is definitely the peace in the morning.”',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 15,
                           fontStyle: FontStyle.italic,
